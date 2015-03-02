@@ -20,6 +20,10 @@ begin
   photo_path = photo_list.pop
   #File.write(photo_paths_log, photo_list.join("\n"))
   exif = EXIFR::JPEG.new(photo_path)
+rescue EXIFR::MalformedJPEG
+	tsv_line = "#{photo_path}\tNA\tNA\tNA\tNA"
+	File.open(tsv, 'a') { |f| f.puts tsv_line}
+else
   image_name = photo_path.split('/').last
   tsv_line = "#{photo_path}\t#{exif.date_time}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d*\)/].gsub(/\D/,"")}"
   File.open(tsv, 'a') { |f| f.puts tsv_line}
