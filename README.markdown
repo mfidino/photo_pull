@@ -1,0 +1,1 @@
+A ruby file that makes it possible to parse through camera trap photos
