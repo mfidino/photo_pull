@@ -3,7 +3,7 @@ Bundler.require(:default)
 Dotenv.load
 
 photo_paths_log = 'photo_paths.log'
-
+pattern = /^\w+-\w+/
 if File.file?(photo_paths_log)
   photo_list = File.open(photo_paths_log, 'r').split("\n")
 else 
@@ -18,6 +18,7 @@ end
 
 begin 
   photo_path = photo_list.pop
+  
 
   #File.write(photo_paths_log, photo_list.join("\n"))
   exif = EXIFR::JPEG.new(photo_path)
@@ -26,7 +27,13 @@ rescue
 	File.open(tsv, 'a') { |f| f.puts tsv_line} 
 else
   image_name = photo_path.split('/').last
-  tsv_line = "#{photo_path}\t#{exif.date_time}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
-  File.open(tsv, 'a') { |f| f.puts tsv_line}
+
+  if image_name.match pattern
+    tsv_line = "#{photo_path}\t#{exif.date_time}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
+    File.open(tsv, 'a') { |f| f.puts tsv_line}
+  else
+    tsv_line = "#{photo_path}\tNA\tNA\tNA\tNA"
+    File.open(tsv, 'a') { |f| f.puts tsv_line} 
+  end
 end while photo_list.count > 0
 
