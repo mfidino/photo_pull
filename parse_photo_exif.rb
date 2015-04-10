@@ -23,7 +23,7 @@ begin
   #File.write(photo_paths_log, photo_list.join("\n"))
   exif = EXIFR::JPEG.new(photo_path)
 rescue 
-	tsv_line = "#{photo_path}\tNA\tNA\tNA\tNA"
+	tsv_line = "#{photo_path}\tNA\tNA\tcorrupt file\tNA"
 	File.open(tsv, 'a') { |f| f.puts tsv_line} 
 else
   image_name = photo_path.split('/').last
@@ -32,7 +32,7 @@ else
     tsv_line = "#{photo_path}\t#{exif.date_time}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
     File.open(tsv, 'a') { |f| f.puts tsv_line}
   else
-    tsv_line = "#{photo_path}\tNA\tNA\tNA\tNA"
+    tsv_line = "#{photo_path}\tNA\tNA\tincorrect file name\tNA"
     File.open(tsv, 'a') { |f| f.puts tsv_line} 
   end
 end while photo_list.count > 0
