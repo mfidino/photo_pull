@@ -1,23 +1,25 @@
-#require 'bundler/setup'
+require 'bundler/setup'
 #require 'exifr'
-require 'dotenv'
+#require 'dotenv'
 require 'mini_exiftool'
 
-#Bundler.require(:default)
-Dotenv.load
+Bundler.require(:default)
+#Dotenv.load
 
-photo_paths_log = 'photo_paths.log'
+
+photo_paths_log = ARGV[0]
 pattern = /^\w+-\w+-\w+\s\(\d+\)\.JPG/
-if File.file?(photo_paths_log)
-  photo_list = File.open(photo_paths_log, 'r').split("\n")
-else 
-  photo_list = Dir["#{ENV['PHOTO_PATH']}/**/*.JPG"]
-end
+#if File.file?(photo_paths_log)
+  #photo_list = File.open(photo_paths_log, 'r').split("\n")
+#else 
+# currently works for each transect
+  photo_list = Dir.glob("#{photo_paths_log}/**/*.JPG")
+#end
 
 tsv = "output_#{ENV['PHOTO_PATH'].split('/').last}.txt"
 
 unless File.file?(tsv) 
-  File.write(tsv, "path\tdate_time\tsite_season\tsite\tname\n")
+  File.write(tsv, "path\tdate_time\tkeywords\tsite_season\tsite\tname\n")
 end 
 
 begin 
