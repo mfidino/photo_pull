@@ -1,9 +1,13 @@
-require 'bundler/setup'
-Bundler.require(:default)
+#require 'bundler/setup'
+#require 'exifr'
+require 'dotenv'
+require 'mini_exiftool'
+
+#Bundler.require(:default)
 Dotenv.load
 
 photo_paths_log = 'photo_paths.log'
-pattern = /^\w+-\w+/
+pattern = /^\w+-\w+-\w+\s\(\d+\)\.JPG/
 if File.file?(photo_paths_log)
   photo_list = File.open(photo_paths_log, 'r').split("\n")
 else 
@@ -21,7 +25,7 @@ begin
   
 
   #File.write(photo_paths_log, photo_list.join("\n"))
-  exif = EXIFR::JPEG.new(photo_path)
+  exif = MiniExiftool.new(photo_path)
 rescue 
 	tsv_line = "#{photo_path}\tNA\tNA\tcorrupt file\tNA"
 	File.open(tsv, 'a') { |f| f.puts tsv_line} 
@@ -29,7 +33,7 @@ else
   image_name = photo_path.split('/').last
 
   if image_name.match pattern
-    tsv_line = "#{photo_path}\t#{exif.date_time}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
+    tsv_line = "#{photo_path}\t#{exif.datetimeoriginal}\t#{exif.xpkeywords}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
     File.open(tsv, 'a') { |f| f.puts tsv_line}
   else
     tsv_line = "#{photo_path}\tNA\tNA\tincorrect file name\tNA"
