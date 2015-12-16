@@ -18,7 +18,7 @@ pattern = /^\w+-\w+-\w+\s\(\d+\)\.JPG/
   photo_list = Dir.glob("#{photo_paths_log}/**/*.JPG")
 #end
 
-tsv = "output_#{photo_paths_log.split('/').last}.txt"
+tsv = "./to_format/output_#{photo_paths_log.split('/').last}.txt"
 
 unless File.file?(tsv) 
   File.write(tsv, "path\tdate_time\tkeywords\tsite_season\tsite\tname\n")
