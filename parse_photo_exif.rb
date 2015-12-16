@@ -1,9 +1,11 @@
-require 'bundler/setup'
+#require 'bundler/setup'
 #require 'exifr'
 #require 'dotenv'
+#source 'https://rubygems.org'
+require 'rubygems'
 require 'mini_exiftool'
-
-Bundler.require(:default)
+#require 'mini_exiftool'
+#Bundler.require(:default)
 #Dotenv.load
 
 
@@ -16,7 +18,7 @@ pattern = /^\w+-\w+-\w+\s\(\d+\)\.JPG/
   photo_list = Dir.glob("#{photo_paths_log}/**/*.JPG")
 #end
 
-tsv = "output_#{ENV['PHOTO_PATH'].split('/').last}.txt"
+tsv = "output_#{photo_paths_log.split('/').last}.txt"
 
 unless File.file?(tsv) 
   File.write(tsv, "path\tdate_time\tkeywords\tsite_season\tsite\tname\n")
@@ -35,7 +37,7 @@ else
   image_name = photo_path.split('/').last
 
   if image_name.match pattern
-    tsv_line = "#{photo_path}\t#{exif.datetimeoriginal}\t#{exif.xpkeywords}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
+    tsv_line = "#{photo_path}\t#{exif.datetimeoriginal}\t#{exif.subject}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
     File.open(tsv, 'a') { |f| f.puts tsv_line}
   else
     tsv_line = "#{photo_path}\tNA\tNA\tincorrect file name\tNA"

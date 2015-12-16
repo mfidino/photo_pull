@@ -1,12 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    dotenv (1.0.2)
-    exifr (1.2.0)
+    mini_exiftool (2.5.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  dotenv
-  exifr
+  mini_exiftool
