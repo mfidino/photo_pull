@@ -265,3 +265,21 @@ for(i in 1:length(output_files)){
 }
 print("outputs moved to already_formatted_outputs sub-folder")
 
+### we should now have picrec ready to be put into access, 
+### but now we need to get the picatt
+### ready. To do this, we need to generate the picture ID
+
+#  merge the picatt_list
+picatt_all <- rbind.fill(picatt_list)
+
+### before running this function you need to determine what
+### the starting number is. Look this up in access
+picatt_all$PictureID <- create_pic_id(start = start_number, 
+                                      sum(n_correct), unlist(freq_list))
+
+# save this table
+write.table(picatt_all, paste(the_path, "/../formatted_for_access/", "picatt_",dd, ".txt", sep = ""),
+            append = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+print("files for access in formatted_for_access sub-folder")
+print("script complete!")
+
