@@ -10,7 +10,7 @@
 #########################################################
 # packages to load
 #########################################################
-
+print("loading plyr package")
 library(plyr)
 
 #########################################################
@@ -28,7 +28,7 @@ transects <- "RST|JNT|DPT|SCT"
 #########################################################################
 # some functions to call in the script
 #########################################################################
-
+print("loading functions")
 # remove leading and trailing whitespace
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
@@ -153,6 +153,7 @@ freq_list <- vector("list", length(output_files))
 n_correct <- rep(0, length(output_files))
 
 # iterate through each output file in to_format
+print("writing files")
 for(i in 1:length(output_files)){
   
   # read in the file, fill = TRUE because not all rows have every element
@@ -260,17 +261,7 @@ for(i in 1:length(output_files)){
   my_file_rename(paste(the_path, "/", output_files[i], sep = ""),
                  paste(the_path, "/../already_formatted_outputs/", 
                        output_files[i], sep= ""))
+  print(paste(i, "of", length(output_files), "files formatted", sep = " "))
 }
+print("outputs moved to already_formatted_outputs sub-folder")
 
-### we should now have picrec ready to be put into access, but now we need to get the picatt
-### ready. To do this, we need to generate the picture ID
-
-#  merge the picatt_list
-
-picatt_all <- rbind.fill(picatt_list)
-
-picatt_all$PictureID <- create_pic_id(start = 220084, sum(n_correct), unlist(freq_list))
-
-# save this table
-write.table(picatt_all, paste(the_path, "/../formatted_for_access/", "picatt_",dd, ".txt", sep = ""),
-            append = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
