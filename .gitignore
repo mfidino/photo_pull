@@ -1,3 +1,8 @@
 .env
 photo_paths.log
 output_*
+incorrect_*
+corrupt*
+picrec*
+picatt*
+*.JPG
