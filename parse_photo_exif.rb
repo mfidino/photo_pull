@@ -40,7 +40,7 @@ else
     tsv_line = "#{photo_path}\t#{exif.datetimeoriginal}\t#{exif.subject}\t#{image_name[/^[^ ]*/]}\t#{image_name[/^\w+-\w+/]}\t#{image_name[/\(\d+\)/].gsub(/\D/,"")}"
     File.open(tsv, 'a') { |f| f.puts tsv_line}
   else
-    tsv_line = "#{photo_path}\tNA\tNA\tincorrect file name\tNA"
+    tsv_line = "#{photo_path}\t#{exif.datetimeoriginal}\t#{exif.subject}\tincorrect file name\tNA"
     File.open(tsv, 'a') { |f| f.puts tsv_line} 
   end
 end while photo_list.count > 0
